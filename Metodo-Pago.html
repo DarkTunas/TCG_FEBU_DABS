@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Método de Pago</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://kit.fontawesome.com/2f49bdaab6.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #000000;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    h2, h3 { color: #00a1b2; text-align: center; margin-bottom: 1.5rem; }
+    p { color: #fff; text-align: justify; line-height: 1.5; margin-bottom: 1rem; }
+    .checkout-container {
+      background-color: #292929; padding: 2em; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+      width: 100%; max-width: 420px; text-align: center; margin-top: 2rem;
+    }
+    .payment-options { display: flex; flex-direction: column; gap: 1rem; margin: 1.2rem 0 1.6rem; }
+    .option { border: 2px solid #fffcfc; border-radius: 10px; padding: 0.9rem; cursor: pointer; transition: all 0.18s ease; display: flex; flex-direction: column; align-items: center; }
+    .option:focus, .option:hover { border-color: #00a1b2; background-color: #292929; outline: none; }
+    .option-top { display: flex; gap: 0.8rem; align-items: center; justify-content: center; }
+    .option img { width: 90px; height: auto; object-fit: contain; }
+    .option-title { margin-top: 0.6rem; font-weight: 600; }
+    .option-sub { margin-top: 0.2rem; color: #a3a3a3; font-size: 0.95rem; }
+    .hidden { display: none; }
+    .form-group { margin-bottom: 1rem; text-align: left; }
+    .form-group label { display: block; margin-bottom: .4rem; font-size: 0.95rem; color: #fff; }
+    .form-group input { width: 100%; padding: .7rem; border: 1px solid #cfcfcf; border-radius: 6px; font-size: 1rem; box-sizing: border-box; }
+    .form-group.row { display: flex; gap: 0.7rem; }
+    .col { flex: 1; }
+    button { width: 100%; padding: 0.95rem; background-color: #00a1b2; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; margin-top: 0.6rem; }
+    button:hover { background-color: #008b9a; }
+    .card-input-wrap { position: relative; }
+    .chip { position: absolute; right: 8px; top: 8px; padding: 0.25rem 0.6rem; border-radius: 999px; background: #e9ecef; font-weight: 700; font-size: 0.82rem; }
+    .chip.visa { background: #e8f0ff; color: #1a57a1; border: 1px solid #c7ddff; }
+    .chip.mastercard { background: #fff3e6; color: #b55214; border: 1px solid #ffd7b8; }
+    #payment-status { margin-top: 0.9rem; text-align: center; font-weight: 700; }
+    .mercado-info { text-align: center; }
+    .mercado-info p { margin-bottom: 0.6rem; }
+    .mercado-info button { background-color: #009ee3; }
+    .mercado-info button:hover { background-color: #007cbf; }
+
+    /* --- NUEVO ESTILO PARA CHECKBOX CON ENLACE --- */
+    .terms-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      color: #fff;
+    }
+    .terms-label a {
+      color: #00a1b2;
+      text-decoration: underline;
+    }
+    .terms-label a:hover {
+      color: #008b9a;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="#" class="logo">FEBU_DABS</a>
+  </header>
+
+  <div class="checkout-container">
+    <h2><i class="fa-solid fa-credit-card"></i> Seleccione un método de pago</h2>
+
+    <div class="payment-options">
+      <div class="option" data-method="card" id="card-option" tabindex="0">
+        <div class="option-top">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa">
+        </div>
+        <p class="option-title">Mastercard / Visa</p>
+        <p class="option-sub">Tarjeta de crédito o débito</p>
+      </div>
+      <div class="option" data-method="mercado" id="mercado-option" tabindex="0">
+        <img src="https://yt3.googleusercontent.com/mQNgiFP6iZWtB5FM0fuWaia83QSAkxw4IqdAYqvPmVZwk0IjJYRJ9aVk_Z_epaPA3lXQrb9Zig=s900-c-k-c0x00ffffff-no-rj" alt="Mercado Pago">
+        <p class="option-title">Mercado Pago</p>
+      </div>
+      <div class="option" data-method="paypal" id="paypal-option" tabindex="0">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal">
+        <p class="option-title">PayPal</p>
+      </div>
+    </div>
+
+    <form id="payment-form" class="hidden" autocomplete="off">
+      <div class="form-group">
+        <label for="card-number">Número de tarjeta</label>
+        <div class="card-input-wrap">
+          <input type="text" id="card-number" inputmode="numeric" maxlength="19" placeholder="XXXX XXXX XXXX XXXX" required />
+          <span id="detected-type" class="chip hidden">---</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="card-holder">Titular de la tarjeta</label>
+        <input type="text" id="card-holder" required />
+      </div>
+      <div class="form-group row">
+        <div class="col">
+          <label for="expiry-date">Fecha de vencimiento</label>
+          <input type="text" id="expiry-date" placeholder="MM/AA" maxlength="5" required />
+        </div>
+        <div class="col">
+          <label for="cvv">CVV</label>
+          <input type="text" id="cvv" inputmode="numeric" maxlength="4" placeholder="CVV" required />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="terms-label">
+          <input type="checkbox" id="terms">
+          <a href="Terminos-y-Condiciones.html" target="_blank">Acepto los términos y condiciones</a>
+        </label>
+      </div>
+
+      <button type="submit">Pagar</button>
+    </form>
+
+    <div id="mercado-info" class="hidden">
+      <h3>Descubre la practicidad de <br> Mercado Pago</h3>
+      <p>- Paga con tus tarjetas guardadas o dinero disponible sin completar datos.</p>
+      <p>- Compra de forma segura con el medio de pago que prefieras.</p>
+      <p><b>Visa · Mastercard · American Express · SPEI · Dinero en cuenta</b></p>
+      <p>Te llevaremos a Mercado Pago.<br>Si no tienes una cuenta, puedes usar tu e-mail.</p>
+      <button id="mercado-btn">Pagar con Mercado Pago</button>
+    </div>
+
+    <div id="payment-status"></div>
+  </div>
+
+  <script>
+    // Recuperar carrito guardado desde index.html
+    let carrito = JSON.parse(localStorage.getItem("carritoProductos")) || [];
+    
+
+    const options = document.querySelectorAll('.option');
+    const form = document.getElementById('payment-form');
+    const statusDiv = document.getElementById('payment-status');
+    const cardNumberInput = document.getElementById('card-number');
+    const detectedTypeSpan = document.getElementById('detected-type');
+    const mercadoInfo = document.getElementById('mercado-info');
+    const mercadoBtn = document.getElementById('mercado-btn');
+
+    function detectCardType(number) {
+      const v = number.replace(/\D/g, '');
+      if (/^4/.test(v)) return 'visa';
+      if (/^(5[1-5])/.test(v) || /^(22[2-9]|2[3-6]|27[0-1]|2720)/.test(v)) return 'mastercard';
+      return 'unknown';
+    }
+
+    function formatCardNumber(value) {
+      const digits = value.replace(/\D/g, '').slice(0, 16);
+      return digits.replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    function updateDetectedTypeDisplay(type) {
+      detectedTypeSpan.classList.add('hidden');
+      detectedTypeSpan.classList.remove('visa', 'mastercard');
+      if (!type || type === 'unknown') return;
+      detectedTypeSpan.classList.remove('hidden');
+      detectedTypeSpan.textContent = type.toUpperCase();
+      detectedTypeSpan.classList.add(type);
+    }
+
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        const method = option.dataset.method;
+        statusDiv.textContent = '';
+        form.classList.add('hidden');
+        mercadoInfo.classList.add('hidden');
+
+        if (method === 'paypal') {
+          if(confirm(`Simular pago con PayPal exitoso por $${calcularTotal().toFixed(2)}?`)) handleFactura();
+        } else if (method === 'mercado') {
+          mercadoInfo.classList.remove('hidden');
+        } else if (method === 'card') {
+          form.classList.remove('hidden');
+          cardNumberInput.focus();
+        }
+      });
+    });
+
+    cardNumberInput.addEventListener('input', (e) => {
+      const formatted = formatCardNumber(e.target.value);
+      e.target.value = formatted;
+      const type = detectCardType(formatted);
+      updateDetectedTypeDisplay(type);
+    });
+
+    mercadoBtn.addEventListener('click', () => {
+      if(confirm(`Simular pago con Mercado Pago exitoso por $${calcularTotal().toFixed(2)}?`)) handleFactura();
+    });
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      if(!document.getElementById('terms').checked){
+        alert('Debes aceptar los términos y condiciones.');
+        return;
+      }
+      const cardNumber = cardNumberInput.value.replace(/\s/g, '');
+      statusDiv.textContent = `Procesando el pago de $${calcularTotal().toFixed(2)}...`;
+      statusDiv.style.color = '#555';
+
+      setTimeout(() => {
+        if (cardNumber.endsWith('0')) {
+          statusDiv.textContent = '❌ Pago fallido. Verifique su tarjeta.';
+          statusDiv.style.color = 'red';
+        } else {
+          statusDiv.textContent = '✅ Pago exitoso. ¡Gracias por su compra!';
+          statusDiv.style.color = 'green';
+          form.reset();
+          updateDetectedTypeDisplay(null);
+          form.classList.add('hidden');
+          handleFactura();
+        }
+      }, 1500);
+    });
+
+    function calcularTotal(){
+      return carrito.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    }
+
+    function handleFactura(){
+      const facturar = confirm(`¿Desea generar factura por $${calcularTotal().toFixed(2)}?`);
+      if(facturar){
+        localStorage.setItem("carritoParaFactura", JSON.stringify(carrito));
+        window.location.href = "datos-factura.html";
+      } else {
+        localStorage.removeItem("carritoProductos");
+        carrito = [];
+        window.location.href = "index.html";
+      }
+    }
+  </script>
+</body>
+</html>

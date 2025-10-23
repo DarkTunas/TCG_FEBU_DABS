@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Factura Digital - FEBU_DABS</title>
+
+  <!-- Librerías para QR y PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background: #1c1c1c;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      padding: 2rem;
+    }
+    .factura {
+      max-width: 800px;
+      margin: auto;
+      background: #2a2a2a;
+      padding: 2rem;
+      border-radius: 15px;
+    }
+    h2 { text-align: center; margin-bottom: 1rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    table th, table td {
+      border-bottom: 1px solid #444;
+      padding: 0.7rem;
+      text-align: left;
+    }
+    .qr { text-align: center; margin-top: 2rem; }
+    .boton {
+      display: block;
+      margin: 1.5rem auto 0;
+      padding: 0.9rem 1.5rem;
+      background: #00b894;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .boton:hover { background: #019874; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">FEBU_DABS</a>
+  </header>
+
+  <div class="factura">
+    <h2>Factura Digital - FEBU_DABS</h2>
+    <div id="datosCliente"></div>
+
+    <table id="tablaProductos">
+      <thead>
+        <tr><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Total</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h3 id="totalFactura"></h3>
+
+    <div class="qr">
+      <canvas id="codigoQR"></canvas>
+    </div>
+
+    <button class="boton" id="descargarPDF">Descargar PDF</button>
+  </div>
+
+  <script>
+    // Recuperar datos del cliente y carrito
+    const datos = JSON.parse(localStorage.getItem("facturaDatos"));
+    const productos = JSON.parse(localStorage.getItem("carritoProductos"));
+
+    if(!datos || !productos || productos.length === 0){
+      alert("No hay datos de factura o carrito vacío. Redirigiendo al inicio.");
+      window.location.href = "index.html";
+    }
+
+    // Mostrar datos del cliente
+    const contDatos = document.getElementById("datosCliente");
+    contDatos.innerHTML = `
+      <p><strong>Cliente:</strong> ${datos.nombre}</p>
+      <p><strong>RFC:</strong> ${datos.rfc}</p>
+      <p><strong>Correo:</strong> ${datos.correo}</p>
+      <p><strong>Dirección:</strong> ${datos.direccion}</p>
+      <p><strong>Método de pago:</strong> ${datos.metodoPago}</p>
+    `;
+
+    // Llenar la tabla con los productos
+    const tbody = document.querySelector("#tablaProductos tbody");
+    let total = 0;
+    productos.forEach(p => {
+      const subtotal = p.price * p.quantity;
+      total += subtotal;
+      tbody.innerHTML += `
+        <tr>
+          <td>${p.name}</td>
+          <td>${p.quantity}</td>
+          <td>$${p.price.toFixed(2)}</td>
+          <td>$${subtotal.toFixed(2)}</td>
+        </tr>
+      `;
+    });
+
+    document.getElementById("totalFactura").innerText = "Total: $" + total.toFixed(2);
+
+    // Generar QR con info básica
+    const qr = new QRious({
+      element: document.getElementById("codigoQR"),
+      size: 200,
+      value: `Factura FEBU_DABS\nCliente: ${datos.nombre}\nTotal: $${total.toFixed(2)}`
+    });
+
+    // Función para generar PDF completo
+    document.getElementById("descargarPDF").addEventListener("click", () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(18);
+      doc.text("Factura FEBU_DABS", 105, 20, null, null, "center");
+
+      doc.setFontSize(12);
+      doc.text(`Cliente: ${datos.nombre}`, 20, 40);
+      doc.text(`RFC: ${datos.rfc}`, 20, 50);
+      doc.text(`Correo: ${datos.correo}`, 20, 60);
+      doc.text(`Dirección: ${datos.direccion}`, 20, 70);
+      doc.text(`Método de pago: ${datos.metodoPago}`, 20, 80);
+      doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 90);
+
+      doc.text("Productos:", 20, 105);
+      let y = 115;
+      productos.forEach(item => {
+        doc.text(`${item.name} x${item.quantity} - $${(item.price*item.quantity).toFixed(2)}`, 20, y);
+        y += 10;
+      });
+
+      doc.text(`Total: $${total.toFixed(2)}`, 20, y + 5);
+
+      const qrPDF = new QRious({
+        value: `Factura FEBU_DABS\nCliente: ${datos.nombre}\nTotal: $${total.toFixed(2)}`,
+        size: 100
+      });
+      doc.addImage(qrPDF.toDataURL(), 'PNG', 150, 30, 50, 50);
+
+      doc.save(`Factura_${datos.nombre}.pdf`);
+
+      // Limpiar localStorage después de generar factura
+      localStorage.removeItem("facturaDatos");
+      localStorage.removeItem("carritoProductos");
+    });
+  </script>
+</body>
+</html>

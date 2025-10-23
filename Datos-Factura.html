@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datos para Factura - FEBU_DABS</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <style>
+    body {
+      background: #1c1c1c;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      padding: 2rem;
+    }
+    form {
+      max-width: 500px;
+      margin: auto;
+      background: #2a2a2a;
+      padding: 2rem;
+      border-radius: 15px;
+      overflow-y: auto;
+    }
+    h2 { text-align: center; margin-bottom: 1.5rem; }
+    label { display: block; margin-top: 1rem; }
+    input, select {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 10px;
+      background: #3c3c3c;
+      color: #fff;
+      margin-top: 0.3rem;
+    }
+    button {
+      width: 100%;
+      padding: 0.9rem;
+      margin-top: 1.5rem;
+      border: none;
+      background: #00b894;
+      color: white;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover { background: #019874; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">FEBU_DABS</a>
+  </header>
+
+  <form id="formFactura">
+    <h2>Datos para Facturación</h2>
+
+    <label>Nombre completo:</label>
+    <input type="text" id="nombre" required>
+
+    <label>RFC:</label>
+    <input type="text" id="rfc" required>
+
+    <label>Correo electrónico:</label>
+    <input type="email" id="correo" required>
+
+    <label>Dirección:</label>
+    <input type="text" id="direccion" required>
+
+    <label>Método de pago:</label>
+    <select id="metodoPago" required>
+      <option value="">Seleccionar</option>
+      <option value="Tarjeta de Crédito">Tarjeta de Crédito</option>
+      <option value="Tarjeta de Débito">Tarjeta de Débito</option>
+      <option value="Transferencia">Transferencia</option>
+      <option value="Efectivo">Efectivo</option>
+    </select>
+
+    <button type="submit">Generar Factura</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("formFactura");
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      
+
+      // Recuperar carrito guardado
+      const productos = JSON.parse(localStorage.getItem("carritoProductos")) || [];
+      let carrito = JSON.parse(localStorage.getItem("carritoProductos"));
+      if(!carrito || carrito.length === 0){
+        alert("El carrito está vacío. No se puede generar la factura.");
+        window.location.href = "index.html";
+        return;
+      }
+
+      // Capturar datos del cliente
+      const datos = {
+        nombre: document.getElementById("nombre").value,
+        rfc: document.getElementById("rfc").value,
+        correo: document.getElementById("correo").value,
+        direccion: document.getElementById("direccion").value,
+        metodoPago: document.getElementById("metodoPago").value
+      };
+
+      // Generar PDF
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(18);
+      doc.text("Factura FEBU_DABS", 105, 20, null, null, "center");
+
+      doc.setFontSize(12);
+      doc.text(`Cliente: ${datos.nombre}`, 20, 40);
+      doc.text(`RFC: ${datos.rfc}`, 20, 50);
+      doc.text(`Correo: ${datos.correo}`, 20, 60);
+      doc.text(`Dirección: ${datos.direccion}`, 20, 70);
+      doc.text(`Método de pago: ${datos.metodoPago}`, 20, 80);
+      doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 90);
+
+      doc.text("Productos:", 20, 105);
+      let y = 115;
+      let total = 0;
+      carrito.forEach(item => {
+        doc.text(`${item.name} x${item.quantity} - $${(item.price*item.quantity).toFixed(2)}`, 20, y);
+        total += item.price * item.quantity;
+        y += 10;
+      });
+      doc.text(`Total: $${total.toFixed(2)}`, 20, y+5);
+
+      // Generar QR
+      const qr = new QRious({
+        value: `Factura FEBU_DABS\nCliente: ${datos.nombre}\nTotal: $${total.toFixed(2)}`,
+        size: 100
+      });
+      const qrDataURL = qr.toDataURL();
+      doc.addImage(qrDataURL, 'PNG', 150, 40, 50, 50);
+
+      // Guardar PDF
+      doc.save(`Factura_${datos.nombre}.pdf`);
+
+      // Limpiar carrito y redirigir al index
+      localStorage.removeItem("carritoProductos");
+      alert("Factura generada correctamente.");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title> Venta de TCG </title>
+
+    <!--FUENTE DE ICONOS-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://kit.fontawesome.com/2f49bdaab6.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!--Contador de visitantes-->
+    <div class="container">
+        <br><br><br><p>Personas que han visitado esta página</p>
+        <div class="counter" id="visitCounter">0</div>
+    </div>
+    <!--Fin Contador de visitantes-->
+
+    <header>
+        <a href="#" class="logo">FEBU_DABS</a>
+        <div class="cont cont-menu">
+
+            <i class="fa-solid fa-bars" id="icono-menu"></i>
+        </div>
+
+        <ul class="navegacion">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#sobreNosotros">Sobre Nosotros</a></li>
+            <li><a href="#productos">Productos</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="Inicio-Sesion.html">Iniciar Sesion</a></li>
+
+            <li><a href="#" id="cart-link"><i class="fa-solid fa-cart-shopping"></i></a></li>
+        </ul>
+    </header>
+
+    <!--Inicio-->
+    <section class="inicio" id="inicio">
+        <div class="txt-inicio">
+            <h1> Colecciona, Juega, Gana. </h1>
+            <h2> La clave de un gran juego es la estrategia, pero sobre todo, un mazo bien construido para dominar cada partida. <br><br> Tu estrategia, tu leyenda. </h2>
+            <a href="#" class="boton"> ¡COMPRA YA! </a>
+
+        </div>
+
+        <div class="img-inicio">
+            <img src="Imagenes/Campeon.jpeg" alt="imagen principal">
+
+        </div>
+    </section>
+    <!--Fin Inicio-->
+
+    <!--Sobre Nosotros-->
+    <section class="sobreNosotros" id="sobreNosotros">
+        <div class="sobreN-img">
+            <img src="Imagenes/Logo.jpeg" alt="sobre nosotros">
+        </div>
+
+        <div class="sobreN-txt">
+            <span>Sobre Nosotros</span>
+            <h2>Dedicados a la venta de los juegos de cartas coleccionables</h2>
+            <p> En FEBU_DABS, somos apasionados de los juegos de cartas coleccionables (TCG) y entendemos que cada carta cuenta. Fundada por jugadores para jugadores, nuestra misión es llevarte los mejores productos del mercado, desde las ediciones más recientes hasta aquellas cartas difíciles de encontrar que completan tu mazo ideal.
+                Nos especializamos en ofrecer una experiencia de compra sencilla y segura, brindando acceso a una amplia variedad de TCG, incluyendo Pokemon, YUGIOH, Magic, Arcadia, entre otros. Todo lo que necesitas para tus duelos, ya seas un coleccionista experimentado o un nuevo jugador que está descubriendo este apasionante mundo.
+                Creemos que un buen mazo es tan importante como la estrategia, por eso trabajamos incansablemente para ofrecer productos de calidad y un servicio excepcional. Además, nuestra comunidad es muy importante para nosotros: organizamos eventos, torneos y brindamos consejos para ayudarte a mejorar tu juego y fortalecer tu colección.
+                Con envíos rápidos y precios competitivos, queremos ser tu tienda de confianza para todo lo relacionado con TCG. Únete a nuestra comunidad y lleva tu pasión al siguiente nivel.
+                
+                ¡Que comiencen los duelos!</p>
+            <a href="Sobre-Nosotros.html" class="boton">Mas Informacion</a>
+        </div>
+    </section>
+    <!--Fin Sobre Nosotros-->
+
+    <!--Productos-->
+    <section class="productos" id="productos">
+
+        <div class="titulo">
+            <span>Los mejores Precios</span>
+            <h2>Los Productos mas solicitados por los clientes</h2>
+        </div>
+        <!--Fin Productos-->
+
+<!--Carrito-->
+    <div class="container">
+        <div class="banner">
+            <img src="img/banner.jpg" alt="">
+        </div>
+
+        <h1 class="title">Productos</h1>
+
+        <div class="product-grid">
+            <div class="product-grid__item" data-name="Aves" data-price="999" data-image="Imagenes/Aves.jpg">
+                <div class="product-grid__imagen">
+                    <img src="Imagenes/Aves.jpg" alt="">
+                </div>
+                <div class="product-grid__info">
+                    <p class="product-grid__name">Elite Trianer Box HIDDEN FATES</p>
+                    <p class="product-grid__price">$999.00 </p>
+                    <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+                </div>
+            </div>
+
+            <div class="product-grid__item" data-name="Booster" data-price="99" data-image="Imagenes/Booster Packs pokemon.jpg">
+                <div class="product-grid__imagen">
+                    <img src="Imagenes/Booster Packs pokemon.jpg" alt="">
+                </div>
+                <div class="product-grid__info">
+                    <p class="product-grid__name">Booster Packs Pokemon</p>
+                    <p class="product-grid__price">$99.00 c/u </p>
+                    <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+                </div>
+            </div>
+
+            <div class="product-grid__item" data-name="Caja de Construccion" data-price="589" data-image="Imagenes/Caja de construcción pokemon.jpg">
+                <div class="product-grid__imagen">
+                    <img src="Imagenes/Caja de construcción pokemon.jpg" alt="">
+                </div>
+                <div class="product-grid__info">
+                    <p class="product-grid__name">Caja de Construccion</p>
+                    <p class="product-grid__price">$589.00 </p>
+                    <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+                    <!--<button class="product-grid__btn btn-default js-add-to-cart">Agregar al carrito</button>-->
+                    <!--<a href="#" class="product-grid__btn btn-default">Agregar al carrito</a>-->
+                </div>
+            </div>
+
+            <div class="product-grid__item" data-name="Calyrex" data-price="459.46" data-image="Imagenes/Calyrex.jpg">
+                <div class="product-grid__imagen">
+                    <img src="Imagenes/Calyrex.jpg" alt="">
+                </div>
+                <div class="product-grid__info">
+                    <p class="product-grid__name">Shadow Rider Calyrex VMAX</p>
+                    <p class="product-grid__price">$459.46 </p>
+                    <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+                </div>
+            </div>
+        
+
+        
+
+        <div class="product-grid__item" data-name="Charizard" data-price="3770.42" data-image="Imagenes/Charizard.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/Charizard.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">Pokemon TCG: Champion's Path Elite</p>
+                <p class="product-grid__price">$3770.42 </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid__item" data-name="Darkrai" data-price="1691.69" data-image="Imagenes/Darkrai.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/Darkrai.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">Astral Radiance Elite Trainer Box</p>
+                <p class="product-grid__price">$1691.69 </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid__item" data-name="Deoxys" data-price="998.00" data-image="Imagenes/Deoxys.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/Deoxys.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">Juego de cartas coleccionables Pokémon Deoxys V Battle Deck</p>
+                <p class="product-grid__price">$998.00 </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid__item" data-name="KANGASKHAN" data-price="496.99" data-image="Imagenes/EX.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/EX.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">POKEMON TCG: BATTLE DECKS: KANGASKHAN EX o Greninja EX</p>
+                <p class="product-grid__price">$496.99 </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid__item" data-name="Lonchera" data-price="780.00" data-image="Imagenes/Lonchera.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/Lonchera.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">Lonchera de coleccion ultra prisme: Solgaleo</p>
+                <p class="product-grid__price">$780.00 </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid__item" data-name="Lucario" data-price="1575.00" data-image="Imagenes/Lucario.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/Lucario.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">Crown Zenith - Lucario Etb</p>
+                <p class="product-grid__price">$1575.00 </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid__item" data-name="Melmetal" data-price="139.69" data-image="Imagenes/Melmetal.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/Melmetal.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">GO Melmetal V Battle Deck</p>
+                <p class="product-grid__price">$139.69 </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid__item" data-name="MewTwo" data-price="1232.69" data-image="Imagenes/MewTwo.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/MewTwo.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">GO Elite - Caja de Entrenamiento</p>
+                <p class="product-grid__price">$1232.69 </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid__item" data-name="Refuerzo" data-price="110.00" data-image="Imagenes/Paquetes de Refuerzo pokemon.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/Paquetes de Refuerzo pokemon.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">Paquetes de Refuerzo</p>
+                <p class="product-grid__price">$110.00 c/u </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid__item" data-name="Primarina" data-price="179.00" data-image="Imagenes/Primarina.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/Primarina.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">DECK SUN AND MOON BRIGHT TIDE PRIMARINA</p>
+                <p class="product-grid__price">$179.00 </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+
+        <div class="product-grid__item" data-name="Rayquaza" data-price="1100.00" data-image="Imagenes/Rayquaza.jpg">
+            <div class="product-grid__imagen">
+                <img src="Imagenes/Rayquaza.jpg" alt="">
+            </div>
+            <div class="product-grid__info">
+                <p class="product-grid__name">Roaring Skies Elite Trainer Box Card Game</p>
+                <p class="product-grid__price">$1100.00 </p>
+                <button class="product-grid__btn btn-default js-add-to-cart"><i class="fa-solid fa-cart-shopping"></i></button>
+            </div>
+        </div>
+    </div>
+    <button id="loadMore" class="btn-load-more">Ver más</button>
+        <!--Fin Carrito-->
+
+        <!--MODAL CARRITO-->
+    <div class="modal" id="jsModalCarrito">
+    <div class="modal__container">
+        <button type="button" class="modal__close fa-solid fa-xmark jsModalClose "></button>
+
+        <div class="modal__info">
+            <div class="modal__header">
+                <h2><i class="fa-brands fa-opencart"></i>Carrito</h2>
+            </div>
+
+            <div class="modal__body">
+                <div class="modal__list" id="cart-items"></div>
+            </div>
+
+            <div class="modal__footer">
+                <div class="modal__list-price">
+                    <ul>
+                        <li>Subtotal: <strong id="cart-subtotal">$0.00</strong></li>
+                        <li>Descuento: <strong>$0.00</strong></li>
+                    </ul>
+                    <h4 class="modal__total-cart"> Total: <span id="cart-total">$0.00</span></h4>
+                </div>
+
+                <div class="modal__btns">
+                    <a href="Metodo-Pago.html" class="btn-border">Ir al carrito</a>
+                    <button id="btnPagar" class="btn-primary">Comprar Ahora</button>
+                </div>
+
+                <!-- <div class="modal__btns">
+                    <a href="Metodo-Pago.html" class="btn-border">Ir al carrito</a> -->
+
+                    <!-- <button class="btn-primary" >Comprar Ahora</button> -->
+                     
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <!--Fin Modal Carrito-->
+
+
+
+        <!--Servicios-->
+        <section class="servicios" id="servicios">
+            <div class="titulo">
+                <span>Servicios</span>
+                <h2>Hasta la puerta de tu casa, compra y nosotros te lo llevamos</h2>
+            </div>
+
+            <div class="contenedor-servicios">
+                <div class="servicios">
+                    <img src="Imagenes/Orden.jpg" alt="Servicio 1">
+                    <h3>Ordenes</h3>
+                    <p>Elija el pedido que mas le convenga</p>
+                </div>
+
+                <div class="servicios">
+                    <img src="Imagenes/Envio.jpg" alt="Servicio 2">
+                    <h3>Envios</h3>
+                    <p>Evios gratuitos</p>
+                </div>
+
+                <div class="servicios">
+                    <img src="Imagenes/Entrega.jpg" alt="Servicio 3">
+                    <h3>Entregas</h3>
+                    <p>Reciba su paquete sin maltrar</p>
+                </div>
+
+            </div>
+        </section>
+        <!-- Modal Pago -->
+
+        <!-- Contactar -->
+        <section class="contactar" id="contactar">
+            <div class="cta">
+                <h2>Pasion por los juegos de cartas desde <br> 2024</h2>
+                <button class="boton" onclick="abrirModal()">Contactanos</button>
+        </section>
+<!-- Fin Contactar -->
+        
+
+<!-- Modal -->
+<div id="miModal" class="modal_1">
+
+    <div class="mimodal_1-contenido">
+    <span class="cerrar" onclick="cerrarModal()">&times;</span>
+    <p>Teléfono: +52 562-955-4162</p>
+    <p>Correo: <a href="https://mail.google.com/mail/?view=cm&fs=1&to=FEBU_DABS10@gmail.com&su=Consulta&body=Hola, me gustaría saber más sobre..." target="_blank">FEBU_DABS10@gmail.com</a></p>
+    
+</div>
+</div>
+        </div>
+        <!--Fin modal-->
+        
+
+        <!-- testimoniales -->
+<section class="testimonial container">
+    <span>Testimoniales</span>
+    <h2>¿Qué opinan nuestros clientes?</h2>
+    <div class="testimonial-content">
+        <div class="testimonial-1">
+            <p>Gran producto, estoy muy satisfecho.</p>
+            <img src="Imagenes/starts.png" alt="Estrellas">
+            <h4>Guadalupe</h4>
+        </div>
+        <div class="testimonial-1">
+            <p>El servicio es excelente, lo recomiendo.</p>
+            <img src="Imagenes/starts.png" alt="Estrellas">
+            <h4>Carlos</h4>
+        </div>
+        <div class="testimonial-1">
+            <p>Siempre tienen lo que busco, me encanta comprar aquí.</p>
+            <img src="Imagenes/starts.png" alt="Estrellas">
+            <h4>María</h4>
+        </div>
+    </div>
+</section>
+<!-- fin testimoniales -->
+
+    <!--contactos-->
+    <section class="contacto">
+        <div class="footer" id="contactos">
+            <div class="contenidoFinal">
+                
+                <div class="links">
+                    <h4>Nuestro Servicio</h4>
+                    <ul>
+                        <li><a href="eventos-y-torneos.html">Eventos y Torneos</a></li>
+                        <li><a href="Envios-Rapidos.html">Envío Rápido y Seguro</a></li>
+                        <li><a href="Entrega.html">Entrega a Domicilio</a></li>
+                        <li><a href="Venta-Mayoreo.html">Venta al por Mayor</a></li>
+                    </ul>
+                </div>
+    
+                <div class="links">
+                    <h4>Informacion</h4>
+                    <ul>
+                        <li><a href="Envios.html">Informacion de Envios</a></li>
+                        <li><a href="Politica-y-Privacidad.html">Politica de privacidad</a></li>
+                        <li><a href="Terminos-y-Condiciones.html">Terminos y condiciones</a></li>
+                    </ul>
+                </div>
+    
+                <div class="links">
+                    <h4>Redes Sociales</h4>
+                    <div class="redes">
+                        <a href="https://www.facebook.com"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://www.x.com"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="https://www.youtube.com"><i class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Fin Contactos-->
+
+        </div>
+
+        <footer>
+            <p>&copy; 2024 FEBU_DABS. Todos los derechos reservados.</p>
+        </footer>
+
+        <!--Chat con IA-->
+        <div class="chat-widget" id="chat-widget">
+            <div class="chat-header" onclick="toggleChat()">
+                Chat
+                <button class="toggle-button" id="toggle-button">-</button>
+            </div>
+            <div class="chat-content" id="chat-content">
+                <div class="predetermined-questions">
+                    <p>Preguntas frecuentes</p>
+                    <button onclick="addPredeterminedQuestion('¿Cuál es tu horario de atención?')">¿Cuál es tu horario de atención?</button>
+                    <button onclick="addPredeterminedQuestion('¿Cuáles son los métodos de pago aceptados?')">¿Cuáles son los métodos de pago aceptados?</button>
+                    <button onclick="addPredeterminedQuestion('¿Ofrecen envíos internacionales?')">¿Ofrecen envíos internacionales?</button>
+                </div>
+                <div id="chat-box" class="chat-box"></div>
+                <div class="input-container">
+                    <input type="text" id="user-input" placeholder="Escribe tu pregunta...">
+                    <button onclick="sendMessage()">Enviar</button>
+                </div>
+            </div>
+        </div>
+        <!--Fin Chat con IA-->
+    
+        <script src="app.js"></script>
+    </body>
+    </html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Venta de TCG</title>
+
+  <!--FUENTE DE ICONOS-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://kit.fontawesome.com/2f49bdaab6.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Estilos personalizados del perfil de usuario -->
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;700;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&display=swap');
+
+    :root {
+      --colorPrincipal: #00b9c5;
+      --colorTexto: #fff;
+      --colorFondo: #151313;
+      --colorSecundario: #9CCB9E;
+      --colorOscuro: #30303F;
+      --border: #C9C6C6;
+    }
+
+    .seccion-perfil-usuario {
+      width: 100%;
+      max-width: 900px;
+      margin: 120px auto 60px;
+      background-color: var(--colorFondo);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      color: var(--colorTexto);
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .perfil-usuario-header {
+      position: relative;
+      width: 100%;
+    }
+
+    .perfil-usuario-portada {
+      background: linear-gradient(120deg, var(--colorPrincipal), var(--colorSecundario));
+      height: 200px;
+      position: relative;
+    }
+
+    .boton-portada {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      background-color: var(--colorPrincipal);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .boton-portada:hover {
+      background-color: var(--colorSecundario);
+    }
+
+    .perfil-usuario-avatar {
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .perfil-usuario-avatar img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 5px solid var(--colorFondo);
+      object-fit: cover;
+    }
+
+    .perfil-usuario-body {
+      padding: 80px 30px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .perfil-usuario-bio {
+      text-align: center;
+    }
+
+    .perfil-usuario-bio .titulo {
+      font-size: 1.8rem;
+      color: var(--colorPrincipal);
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .perfil-usuario-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 20px;
+    }
+
+    .lista-datos {
+      list-style: none;
+      padding: 0;
+    }
+
+.lista-datos li {
+  font-size: 1rem;
+  color: var(--colorTexto);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.lista-datos li:hover {
+  transform: translateX(5px);
+}
+
+.lista-datos .icono {
+  color: var(--colorPrincipal);
+  font-size: 1.1rem;
+  margin-right: 10px;
+}
+
+.lista-datos .dato {
+  margin-left: 6px; /* separa el texto del dato */
+  font-weight: 500;
+  color: #dcdcdc;
+}
+
+input.editable-input {
+  background: transparent;
+  border: 1px solid var(--colorPrincipal);
+  color: var(--colorTexto);
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-size: 1rem;
+  width: 180px;
+  margin-left: 6px; /* espacio visual igual que el span */
+}
+
+input.editable-input:focus {
+  outline: none;
+  border-color: var(--colorSecundario);
+}
+
+    /* ======== BOTÓN EDITAR ======== */
+    .btn-editar {
+      background-color: var(--colorPrincipal);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      margin: 30px auto 0;
+      display: block;
+      transition: 0.3s ease-in-out;
+    }
+
+    .btn-editar:hover {
+      background-color: var(--colorSecundario);
+      transform: scale(1.05);
+    }
+
+    input.editable-input {
+      background: transparent;
+      border: 1px solid var(--colorPrincipal);
+      color: var(--colorTexto);
+      border-radius: 5px;
+      padding: 4px 8px;
+      font-size: 1rem;
+      width: 180px;
+      margin-left: 5px;
+    }
+
+    input.editable-input:focus {
+      outline: none;
+      border-color: var(--colorSecundario);
+    }
+
+    @media (max-width: 720px) {
+      .perfil-usuario-body {
+        padding: 100px 20px 40px;
+      }
+
+      .perfil-usuario-footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .perfil-usuario-avatar img {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--Contador de visitantes-->
+  <div class="container">
+    <br><br><br>
+    <p>Personas que han visitado esta página</p>
+    <div class="counter" id="visitCounter">0</div>
+  </div>
+  <!--Fin Contador de visitantes-->
+
+  <header>
+    <a href="#" class="logo">FEBU_DABS</a>
+    <div class="cont cont-menu">
+      <i class="fa-solid fa-bars" id="icono-menu"></i>
+    </div>
+    <ul class="navegacion">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#sobreNosotros">Sobre Nosotros</a></li>
+      <li><a href="#productos">Productos</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="Inicio-Sesion.html">Iniciar Sesion</a></li>
+      <li><a href="#" id="cart-link"><i class="fa-solid fa-cart-shopping"></i></a></li>
+    </ul>
+  </header>
+
+  <!-- Sección de Perfil de Usuario -->
+  <section class="seccion-perfil-usuario">
+    <div class="perfil-usuario-header">
+      <!-- <div class="perfil-usuario-portada"> -->
+        <div class="perfil-usuario-avatar">
+  <img id="avatar-img" src="Imagenes/usuario.jpg" alt="img-avatar">
+  <button type="button" class="boton-avatar" id="btnCambiarFoto">
+    <i class="far fa-image"></i>
+  </button>
+  <input type="file" id="inputFoto" accept="image/*" style="display:none;">
+</div>
+        </div>
+        <!-- <button type="button" class="boton-portada">
+          <i class="far fa-image"></i> Cambiar fondo
+        </button> -->
+      </div>
+    </div>
+
+    <div class="perfil-usuario-body">
+      <div class="perfil-usuario-bio">
+        <h3 class="titulo">Usuario</h3>
+        <p class="texto">Información editable del usuario.</p>
+      </div>
+
+      <div class="perfil-usuario-footer">
+        <ul class="lista-datos">
+          <li><i class="icono fas fa-map-signs"></i> Nombre: <span class="dato"> </span></li>
+          <li><i class="icono fas fa-phone-alt"></i> Apellidos: <span class="dato"> </span></li>
+          <li><i class="icono fas fa-briefcase"></i> Numero Exterior: <span class="dato"> 123</span></li>
+          <li><i class="icono fas fa-building"></i> Colonia: <span class="dato">Centro</span> </li>
+        
+          <li><i class="icono fas fa-map-marker-alt"></i> Estado: <span class="dato"> </span></li>
+          <li><i class="icono fas fa-calendar-alt"></i> Ciudad: <span class="dato"> </span></li>
+          <li><i class="icono fas fa-user-check"></i> Codigo postal: <span class="dato"> </span></li>
+          <li><i class="icono fas fa-share-alt"></i> Correo Electronico: <span class="dato"> </span></li>
+        </ul>
+      </div>
+
+      <button id="btnEditar" class="btn-editar">Editar datos</button>
+    </div>
+  </section>
+  <!-- FIN Sección de Perfil de Usuario -->
+   
+  <!--JavaScript-->
+  <script>
+    const btnEditar = document.getElementById('btnEditar');
+    const datos = document.querySelectorAll('.dato');
+    let modoEdicion = false;
+
+    // Cargar datos guardados desde localStorage
+    document.addEventListener('DOMContentLoaded', () => {
+      datos.forEach((dato, i) => {
+        const valorGuardado = localStorage.getItem(`dato_${i}`);
+        if (valorGuardado) dato.textContent = valorGuardado;
+      });
+    });
+
+    btnEditar.addEventListener('click', () => {
+      if (!modoEdicion) {
+        // Modo edición
+        datos.forEach(dato => {
+          const texto = dato.textContent.trim();
+          dato.innerHTML = `<input type="text" class="editable-input" value="${texto}">`;
+        });
+        btnEditar.textContent = 'Guardar cambios';
+        modoEdicion = true;
+      } else {
+        // Guardar cambios
+        datos.forEach((dato, i) => {
+          const input = dato.querySelector('input');
+          if (input) {
+            const nuevoValor = input.value.trim() || '—';
+            dato.textContent = nuevoValor;
+            localStorage.setItem(`dato_${i}`, nuevoValor); // Guardar localmente
+          }
+        });
+        btnEditar.textContent = 'Editar datos';
+        modoEdicion = false;
+      }
+    });
+
+    // ==========================
+// CAMBIAR FOTO DE PERFIL
+// ==========================
+const btnCambiarFoto = document.getElementById('btnCambiarFoto');
+const inputFoto = document.getElementById('inputFoto');
+const avatarImg = document.getElementById('avatar-img');
+
+// Cargar imagen guardada si existe
+document.addEventListener('DOMContentLoaded', () => {
+  const imagenGuardada = localStorage.getItem('fotoPerfil');
+  if (imagenGuardada) {
+    avatarImg.src = imagenGuardada;
+  }
+});
+
+// Abrir selector de archivos al hacer clic en el botón
+btnCambiarFoto.addEventListener('click', () => {
+  inputFoto.click();
+});
+
+// Mostrar vista previa y guardar en localStorage
+inputFoto.addEventListener('change', (e) => {
+  const archivo = e.target.files[0];
+  if (archivo && archivo.type.startsWith('image/')) {
+    const lector = new FileReader();
+    lector.onload = () => {
+      avatarImg.src = lector.result;
+      localStorage.setItem('fotoPerfil', lector.result); // Guarda la imagen
+    };
+    lector.readAsDataURL(archivo);
+  } else {
+    alert('Por favor selecciona una imagen válida.');
+  }
+});
+
+
+
+  </script>
+   <!--Fin JavaScript-->
+
+  <!-- Sección de Contacto -->
+  <section class="contacto">
+    <div class="footer" id="contactos">
+      <div class="contenidoFinal">
+        <div class="links">
+          <h4>Nuestro Servicio</h4>
+          <ul>
+            <li><a href="eventos-y-torneos.html">Eventos y Torneos</a></li>
+            <li><a href="Envios-Rapidos.html">Envío Rápido y Seguro</a></li>
+            <li><a href="Entrega.html">Entrega a Domicilio</a></li>
+            <li><a href="Venta-Mayoreo.html">Venta al por Mayor</a></li>
+          </ul>
+        </div>
+
+        <div class="links">
+          <h4>Información</h4>
+          <ul>
+            <li><a href="Envios.html">Información de Envios</a></li>
+            <li><a href="Politica-y-Privacidad.html">Política de privacidad</a></li>
+            <li><a href="Terminos-y-Condiciones.html">Términos y condiciones</a></li>
+          </ul>
+        </div>
+
+        <div class="links">
+          <h4>Redes Sociales</h4>
+          <div class="redes">
+            <a href="https://www.facebook.com"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.x.com"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://www.youtube.com"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2024 FEBU_DABS. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Chat con IA -->
+  <div class="chat-widget" id="chat-widget">
+    <div class="chat-header" onclick="toggleChat()">
+      Chat
+      <button class="toggle-button" id="toggle-button">-</button>
+    </div>
+    <div class="chat-content" id="chat-content">
+      <div class="predetermined-questions">
+        <p>Preguntas frecuentes</p>
+        <button onclick="addPredeterminedQuestion('¿Cuál es tu horario de atención?')">¿Cuál es tu horario de atención?</button>
+        <button onclick="addPredeterminedQuestion('¿Cuáles son los métodos de pago aceptados?')">¿Cuáles son los métodos de pago aceptados?</button>
+        <button onclick="addPredeterminedQuestion('¿Ofrecen envíos internacionales?')">¿Ofrecen envíos internacionales?</button>
+      </div>
+      <div id="chat-box" class="chat-box"></div>
+      <div class="input-container">
+        <input type="text" id="user-input" placeholder="Escribe tu pregunta...">
+        <button onclick="sendMessage()">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
