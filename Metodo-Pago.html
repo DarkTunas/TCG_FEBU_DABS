@@ -235,7 +235,7 @@
     const facturar = confirm(`¿Desea generar factura por $${calcularTotal().toFixed(2)}?`);
     if(facturar){
       localStorage.setItem("carritoParaFactura", JSON.stringify(carrito));
-      window.location.href = "datos-factura.html";
+      window.location.href = "Datos-Factura.html";
     } else {
       localStorage.removeItem("carritoProductos");
       carrito = [];
