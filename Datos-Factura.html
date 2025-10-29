@@ -81,72 +81,76 @@
   </form>
 
   <script>
-    const form = document.getElementById("formFactura");
+  const form = document.getElementById("formFactura");
 
-    form.addEventListener("submit", e => {
-      e.preventDefault();
-      
+  form.addEventListener("submit", e => {
+    e.preventDefault();
 
-      // Recuperar carrito guardado
-      const productos = JSON.parse(localStorage.getItem("carritoProductos")) || [];
-      let carrito = JSON.parse(localStorage.getItem("carritoProductos"));
-      if(!carrito || carrito.length === 0){
-        alert("El carrito está vacío. No se puede generar la factura.");
-        window.location.href = "index.html";
-        return;
-      }
-
-      // Capturar datos del cliente
-      const datos = {
-        nombre: document.getElementById("nombre").value,
-        rfc: document.getElementById("rfc").value,
-        correo: document.getElementById("correo").value,
-        direccion: document.getElementById("direccion").value,
-        metodoPago: document.getElementById("metodoPago").value
-      };
-
-      // Generar PDF
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-
-      doc.setFontSize(18);
-      doc.text("Factura FEBU_DABS", 105, 20, null, null, "center");
-
-      doc.setFontSize(12);
-      doc.text(`Cliente: ${datos.nombre}`, 20, 40);
-      doc.text(`RFC: ${datos.rfc}`, 20, 50);
-      doc.text(`Correo: ${datos.correo}`, 20, 60);
-      doc.text(`Dirección: ${datos.direccion}`, 20, 70);
-      doc.text(`Método de pago: ${datos.metodoPago}`, 20, 80);
-      doc.text(`Fecha: ${new Date().toLocaleDateString()}`, 20, 90);
-
-      doc.text("Productos:", 20, 105);
-      let y = 115;
-      let total = 0;
-      carrito.forEach(item => {
-        doc.text(`${item.name} x${item.quantity} - $${(item.price*item.quantity).toFixed(2)}`, 20, y);
-        total += item.price * item.quantity;
-        y += 10;
-      });
-      doc.text(`Total: $${total.toFixed(2)}`, 20, y+5);
-
-      // Generar QR
-      const qr = new QRious({
-        value: `Factura FEBU_DABS\nCliente: ${datos.nombre}\nTotal: $${total.toFixed(2)}`,
-        size: 100
-      });
-      const qrDataURL = qr.toDataURL();
-      doc.addImage(qrDataURL, 'PNG', 150, 40, 50, 50);
-
-      // Guardar PDF
-      doc.save(`Factura_${datos.nombre}.pdf`);
-
-      // Limpiar carrito y redirigir al index
-      localStorage.removeItem("carritoProductos");
-      alert("Factura generada correctamente.");
+    // Recuperar carrito guardado
+    const productos = JSON.parse(localStorage.getItem("carritoProductos")) || [];
+    if (!productos || productos.length === 0) {
+      alert("El carrito está vacío. No se puede generar la factura.");
       window.location.href = "index.html";
-    });
-  </script>
-</body>
+      return;
+    }
 
+    // Capturar datos del cliente
+    const datos = {
+      nombre: document.getElementById("nombre").value,
+      rfc: document.getElementById("rfc").value,
+      correo: document.getElementById("correo").value,
+      direccion: document.getElementById("direccion").value,
+      metodoPago: document.getElementById("metodoPago").value,
+      fecha: new Date().toLocaleDateString()
+    };
+
+    // Guardar en localStorage para Factura-Digital
+    localStorage.setItem("facturaDatos", JSON.stringify(datos));
+    localStorage.setItem("facturaProductos", JSON.stringify(productos));
+
+    // Calcular total
+    let total = 0;
+    productos.forEach(item => total += item.price * item.quantity);
+
+    // Generar PDF con QR que lleva a Factura-Digital.html
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Factura FEBU_DABS", 105, 20, null, null, "center");
+
+    doc.setFontSize(12);
+    doc.text(`Cliente: ${datos.nombre}`, 20, 40);
+    doc.text(`RFC: ${datos.rfc}`, 20, 50);
+    doc.text(`Correo: ${datos.correo}`, 20, 60);
+    doc.text(`Dirección: ${datos.direccion}`, 20, 70);
+    doc.text(`Método de pago: ${datos.metodoPago}`, 20, 80);
+    doc.text(`Fecha: ${datos.fecha}`, 20, 90);
+
+    doc.text("Productos:", 20, 105);
+    let y = 115;
+    productos.forEach(item => {
+      doc.text(`${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}`, 20, y);
+      y += 10;
+    });
+    doc.text(`Total: $${total.toFixed(2)}`, 20, y + 5);
+
+    // Generar QR con link directo a Factura-Digital.html
+    const urlFactura = `${window.location.origin}/Factura-Digital.html`;
+    const qr = new QRious({
+      value: urlFactura,
+      size: 100
+    });
+    const qrDataURL = qr.toDataURL();
+    doc.addImage(qrDataURL, 'PNG', 150, 40, 50, 50);
+
+    // Guardar PDF
+    doc.save(`Factura_${datos.nombre}.pdf`);
+
+    // Avisar y redirigir
+    alert("Factura generada correctamente. Escanea el QR para ver la versión digital.");
+    window.location.href = "index.html";
+  });
+</script>
+</body>
 </html>
