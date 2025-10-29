@@ -88,7 +88,7 @@
         <p class="option-title">Mercado Pago</p>
       </div>
       <div class="option" data-method="paypal" id="paypal-option" tabindex="0">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" >
         <p class="option-title">PayPal</p>
       </div>
     </div>
@@ -139,111 +139,110 @@
   </div>
 
   <script>
-    // Recuperar carrito guardado desde index.html
-    let carrito = JSON.parse(localStorage.getItem("carritoProductos")) || [];
-    
+  // Recuperar carrito guardado desde index.html
+  let carrito = JSON.parse(localStorage.getItem("carritoProductos")) || [];
+  
+  const options = document.querySelectorAll('.option');
+  const form = document.getElementById('payment-form');
+  const statusDiv = document.getElementById('payment-status');
+  const cardNumberInput = document.getElementById('card-number');
+  const detectedTypeSpan = document.getElementById('detected-type');
+  const mercadoInfo = document.getElementById('mercado-info');
+  const mercadoBtn = document.getElementById('mercado-btn');
 
-    const options = document.querySelectorAll('.option');
-    const form = document.getElementById('payment-form');
-    const statusDiv = document.getElementById('payment-status');
-    const cardNumberInput = document.getElementById('card-number');
-    const detectedTypeSpan = document.getElementById('detected-type');
-    const mercadoInfo = document.getElementById('mercado-info');
-    const mercadoBtn = document.getElementById('mercado-btn');
+  function detectCardType(number) {
+    const v = number.replace(/\D/g, '');
+    if (/^4/.test(v)) return 'visa';
+    if (/^(5[1-5])/.test(v) || /^(22[2-9]|2[3-6]|27[0-1]|2720)/.test(v)) return 'mastercard';
+    return 'unknown';
+  }
 
-    function detectCardType(number) {
-      const v = number.replace(/\D/g, '');
-      if (/^4/.test(v)) return 'visa';
-      if (/^(5[1-5])/.test(v) || /^(22[2-9]|2[3-6]|27[0-1]|2720)/.test(v)) return 'mastercard';
-      return 'unknown';
-    }
+  function formatCardNumber(value) {
+    const digits = value.replace(/\D/g, '').slice(0, 16);
+    return digits.replace(/(.{4})/g, '$1 ').trim();
+  }
 
-    function formatCardNumber(value) {
-      const digits = value.replace(/\D/g, '').slice(0, 16);
-      return digits.replace(/(.{4})/g, '$1 ').trim();
-    }
+  function updateDetectedTypeDisplay(type) {
+    detectedTypeSpan.classList.add('hidden');
+    detectedTypeSpan.classList.remove('visa', 'mastercard');
+    if (!type || type === 'unknown') return;
+    detectedTypeSpan.classList.remove('hidden');
+    detectedTypeSpan.textContent = type.toUpperCase();
+    detectedTypeSpan.classList.add(type);
+  }
 
-    function updateDetectedTypeDisplay(type) {
-      detectedTypeSpan.classList.add('hidden');
-      detectedTypeSpan.classList.remove('visa', 'mastercard');
-      if (!type || type === 'unknown') return;
-      detectedTypeSpan.classList.remove('hidden');
-      detectedTypeSpan.textContent = type.toUpperCase();
-      detectedTypeSpan.classList.add(type);
-    }
+  options.forEach(option => {
+    option.addEventListener('click', () => {
+      const method = option.dataset.method;
+      statusDiv.textContent = '';
+      form.classList.add('hidden');
+      mercadoInfo.classList.add('hidden');
 
-    options.forEach(option => {
-      option.addEventListener('click', () => {
-        const method = option.dataset.method;
-        statusDiv.textContent = '';
-        form.classList.add('hidden');
-        mercadoInfo.classList.add('hidden');
-
-        if (method === 'paypal') {
-          if(confirm(`Simular pago con PayPal exitoso por $${calcularTotal().toFixed(2)}?`)) handleFactura();
-        } else if (method === 'mercado') {
-          mercadoInfo.classList.remove('hidden');
-        } else if (method === 'card') {
-          form.classList.remove('hidden');
-          cardNumberInput.focus();
-        }
-      });
-    });
-
-    cardNumberInput.addEventListener('input', (e) => {
-      const formatted = formatCardNumber(e.target.value);
-      e.target.value = formatted;
-      const type = detectCardType(formatted);
-      updateDetectedTypeDisplay(type);
-    });
-
-    mercadoBtn.addEventListener('click', () => {
-      if(confirm(`Simular pago con Mercado Pago exitoso por $${calcularTotal().toFixed(2)}?`)) handleFactura();
-    });
-
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      if(!document.getElementById('terms').checked){
-        alert('Debes aceptar los términos y condiciones.');
-        return;
+      if (method === 'paypal') {
+        // 🔹 Redirige directamente a la página oficial de PayPal
+        window.location.href = "https://www.paypal.com/";
+      } else if (method === 'mercado') {
+        mercadoInfo.classList.remove('hidden');
+      } else if (method === 'card') {
+        form.classList.remove('hidden');
+        cardNumberInput.focus();
       }
-      const cardNumber = cardNumberInput.value.replace(/\s/g, '');
-      statusDiv.textContent = `Procesando el pago de $${calcularTotal().toFixed(2)}...`;
-      statusDiv.style.color = '#555';
-
-      setTimeout(() => {
-        if (cardNumber.endsWith('0')) {
-          statusDiv.textContent = '❌ Pago fallido. Verifique su tarjeta.';
-          statusDiv.style.color = 'red';
-        } else {
-          statusDiv.textContent = '✅ Pago exitoso. ¡Gracias por su compra!';
-          statusDiv.style.color = 'green';
-          form.reset();
-          updateDetectedTypeDisplay(null);
-          form.classList.add('hidden');
-          handleFactura();
-        }
-      }, 1500);
     });
+  });
 
-    function calcularTotal(){
-      return carrito.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  cardNumberInput.addEventListener('input', (e) => {
+    const formatted = formatCardNumber(e.target.value);
+    e.target.value = formatted;
+    const type = detectCardType(formatted);
+    updateDetectedTypeDisplay(type);
+  });
+
+  // 🔹 Botón de Mercado Pago redirige a la página oficial
+  mercadoBtn.addEventListener('click', () => {
+    window.location.href = "https://www.mercadopago.com.mx/";
+  });
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if(!document.getElementById('terms').checked){
+      alert('Debes aceptar los términos y condiciones.');
+      return;
     }
+    const cardNumber = cardNumberInput.value.replace(/\s/g, '');
+    statusDiv.textContent = `Procesando el pago de $${calcularTotal().toFixed(2)}...`;
+    statusDiv.style.color = '#555';
 
-    function handleFactura(){
-      const facturar = confirm(`¿Desea generar factura por $${calcularTotal().toFixed(2)}?`);
-      if(facturar){
-        localStorage.setItem("carritoParaFactura", JSON.stringify(carrito));
-        window.location.href = "datos-factura.html";
+    setTimeout(() => {
+      if (cardNumber.endsWith('0')) {
+        statusDiv.textContent = '❌ Pago fallido. Verifique su tarjeta.';
+        statusDiv.style.color = 'red';
       } else {
-        localStorage.removeItem("carritoProductos");
-        carrito = [];
-        window.location.href = "index.html";
+        statusDiv.textContent = '✅ Pago exitoso. ¡Gracias por su compra!';
+        statusDiv.style.color = 'green';
+        form.reset();
+        updateDetectedTypeDisplay(null);
+        form.classList.add('hidden');
+        handleFactura();
       }
+    }, 1500);
+  });
+
+  function calcularTotal(){
+    return carrito.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  }
+
+  function handleFactura(){
+    const facturar = confirm(`¿Desea generar factura por $${calcularTotal().toFixed(2)}?`);
+    if(facturar){
+      localStorage.setItem("carritoParaFactura", JSON.stringify(carrito));
+      window.location.href = "datos-factura.html";
+    } else {
+      localStorage.removeItem("carritoProductos");
+      carrito = [];
+      window.location.href = "index.html";
     }
-  </script>
+  }
+</script>
 </body>
 
 </html>
-
-
