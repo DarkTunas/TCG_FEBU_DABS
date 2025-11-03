@@ -104,20 +104,21 @@
       fecha: new Date().toLocaleDateString()
     };
 
-    // Guardar en localStorage
-    localStorage.setItem("facturaDatos", JSON.stringify(datos));
-    localStorage.setItem("facturaProductos", JSON.stringify(productos));
-
     // Calcular total
     let total = 0;
     productos.forEach(item => total += item.price * item.quantity);
 
-    // 🧠 Detectar ruta completa (compatible con GitHub Pages)
-    // Ejemplo: https://darktunas.github.io/FEBU_DABS/Datos-Factura.html → queremos ir a Factura-Digital.html
-    const currentPath = window.location.pathname;
-    const urlFactura = `${window.location.origin}${currentPath.replace('Datos-Factura.html', 'Factura-Digital.html')}`;
+    // 🔹 Crear objeto combinado (datos + productos)
+    const facturaCompleta = { datos, productos };
 
-    // Generar PDF
+    // 🔹 Codificarlo en Base64 para incluirlo en el QR
+    const dataCodificada = btoa(JSON.stringify(facturaCompleta));
+
+    // 🔹 Crear URL con parámetro "data"
+    const currentPath = window.location.pathname;
+    const urlFactura = `${window.location.origin}${currentPath.replace('Datos-Factura.html', 'Factura-Digital.html')}?data=${dataCodificada}`;
+
+    // 🔹 Generar PDF con QR que incluye los datos
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
@@ -140,13 +141,12 @@
     });
     doc.text(`Total: $${total.toFixed(2)}`, 20, y + 5);
 
-    // 🧾 Generar QR con enlace absoluto correcto
+    // 🔹 Generar QR con enlace completo (con datos)
     const qr = new QRious({
       value: urlFactura,
       size: 100
     });
-    const qrDataURL = qr.toDataURL();
-    doc.addImage(qrDataURL, 'PNG', 150, 40, 50, 50);
+    doc.addImage(qr.toDataURL(), 'PNG', 150, 40, 50, 50);
 
     // Guardar PDF
     doc.save(`Factura_${datos.nombre}.pdf`);
@@ -156,6 +156,8 @@
   });
 </script>
 
+
 </body>
 </html>
+
 
