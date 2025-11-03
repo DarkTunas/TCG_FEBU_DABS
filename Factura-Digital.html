@@ -76,14 +76,43 @@
   </div>
 
   <script>
-  // Recuperar datos
-  const datos = JSON.parse(localStorage.getItem("facturaDatos"));
-  const productos = JSON.parse(localStorage.getItem("facturaProductos"));
-
-  if (!datos || !productos || productos.length === 0) {
-    alert("No hay datos de factura disponibles.");
-    window.location.href = "index.html";
+  // 🔹 Función para obtener parámetros de la URL
+  function obtenerParametro(nombre) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(nombre);
   }
+
+  // 🔹 Intentar obtener los datos desde la URL (si existen)
+  const dataURL = obtenerParametro("data");
+  let factura = null;
+
+  if (dataURL) {
+    try {
+      factura = JSON.parse(atob(dataURL)); // Decodificar Base64
+    } catch (e) {
+      console.error("Error al decodificar datos:", e);
+    }
+  }
+
+  // Si no hay datos en URL, intentar desde localStorage (caso laptop)
+  if (!factura) {
+    const datos = JSON.parse(localStorage.getItem("facturaDatos"));
+    const productos = JSON.parse(localStorage.getItem("facturaProductos"));
+    if (datos && productos) factura = { datos, productos };
+  }
+
+  if (!factura) {
+    document.body.innerHTML = `
+      <div style="text-align:center; color:white; padding:2rem;">
+        <h2>No hay datos de factura disponibles</h2>
+        <p>Por favor genera una nueva factura desde el sitio.</p>
+        <a href="index.html" style="color:#00b894;">Volver al inicio</a>
+      </div>
+    `;
+    throw new Error("Sin datos de factura");
+  }
+
+  const { datos, productos } = factura;
 
   // Mostrar datos del cliente
   const contDatos = document.getElementById("datosCliente");
@@ -113,14 +142,14 @@
   });
   document.getElementById("totalFactura").innerText = "Total: $" + total.toFixed(2);
 
-  // Generar QR (para referencia)
+  // Generar QR (solo para referencia)
   new QRious({
     element: document.getElementById("codigoQR"),
     size: 200,
     value: `${window.location.href}`
   });
 
-  // Botón de descarga PDF
+  // Descargar PDF
   document.getElementById("descargarPDF").addEventListener("click", () => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
@@ -153,5 +182,7 @@
     doc.save(`Factura_${datos.nombre}.pdf`);
   });
 </script>
+
 </body>
 </html>
+
