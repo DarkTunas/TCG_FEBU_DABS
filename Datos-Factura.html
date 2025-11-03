@@ -104,7 +104,7 @@
       fecha: new Date().toLocaleDateString()
     };
 
-    // Guardar en localStorage para Factura-Digital
+    // Guardar en localStorage
     localStorage.setItem("facturaDatos", JSON.stringify(datos));
     localStorage.setItem("facturaProductos", JSON.stringify(productos));
 
@@ -112,7 +112,12 @@
     let total = 0;
     productos.forEach(item => total += item.price * item.quantity);
 
-    // Generar PDF con QR que lleva a Factura-Digital.html
+    // 🧠 Detectar ruta completa (compatible con GitHub Pages)
+    // Ejemplo: https://darktunas.github.io/FEBU_DABS/Datos-Factura.html → queremos ir a Factura-Digital.html
+    const currentPath = window.location.pathname;
+    const urlFactura = `${window.location.origin}${currentPath.replace('Datos-Factura.html', 'Factura-Digital.html')}`;
+
+    // Generar PDF
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
@@ -135,8 +140,7 @@
     });
     doc.text(`Total: $${total.toFixed(2)}`, 20, y + 5);
 
-    // Generar QR con link directo a Factura-Digital.html
-    const urlFactura = `${window.location.origin}/Factura-Digital.html`;
+    // 🧾 Generar QR con enlace absoluto correcto
     const qr = new QRious({
       value: urlFactura,
       size: 100
@@ -147,10 +151,11 @@
     // Guardar PDF
     doc.save(`Factura_${datos.nombre}.pdf`);
 
-    // Avisar y redirigir
     alert("Factura generada correctamente. Escanea el QR para ver la versión digital.");
     window.location.href = "index.html";
   });
 </script>
+
 </body>
 </html>
+
